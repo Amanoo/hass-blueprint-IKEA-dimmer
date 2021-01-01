@@ -130,7 +130,7 @@ action:
                     transition: 1
                   target: !input light
                 - delay:
-                    milliseconds: 1000
+                    milliseconds: 500
 
       - conditions:
           - "{{ command == 'brightness_down_click' }}"
@@ -157,7 +157,7 @@ action:
                     transition: 1
                   target: !input light
                 - delay:
-                    milliseconds: 1000
+                    milliseconds: 500
 
       - conditions:
           - "{{ command == 'arrow_left_click' }}"
