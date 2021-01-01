@@ -116,7 +116,7 @@ action:
 
       - conditions:
           - "{{ command == 'brightness_up_hold' }}"
-        sequence:
+        action:
           - repeat:
               sequence:
                 - service: light.turn_on
@@ -142,7 +142,7 @@ action:
 
       - conditions:
           - "{{ command == 'brightness_down_hold' }}"
-        sequence:
+        action:
           - repeat:
               sequence:
                 - service: light.turn_on
