@@ -48,6 +48,30 @@ blueprint:
           mode: slider
           step: 1
           unit_of_measurement: "%"
+    button_left_short:
+      name: Left button - short press
+      description: Action to run on short left button press
+      default: []
+      selector:
+        action:
+    button_left_long:
+      name: Left button - long press
+      description: Action to run on long left button press
+      default: []
+      selector:
+        action:
+    button_right_short:
+      name: Right button - short press
+      description: Action to run on short right button press
+      default: []
+      selector:
+        action:
+    button_right_long:
+      name: Right button - long press
+      description: Action to run on long right button press
+      default: []
+      selector:
+        action:
 
 mode: restart
 max_exceeded: silent
@@ -102,10 +126,10 @@ action:
               sequence:
                 - service: light.turn_on
                   data:
-                    brightness_step_pct: 5
+                    brightness_step_pct: 10
+                    transition: 1
                   target: !input light
-                - delay:
-                    milliseconds: 100
+                - delay: '1'
 
       - conditions:
           - "{{ command == 'brightness_down_click' }}"
@@ -128,59 +152,23 @@ action:
               sequence:
                 - service: light.turn_on
                   data:
-                    brightness_step_pct: -5
+                    brightness_step_pct: -10
+                    transition: 1
                   target: !input light
-                - delay:
-                    milliseconds: 100
+                - delay: '1'
 
       - conditions:
           - "{{ command == 'arrow_left_click' }}"
-        sequence:
-          - service: light.turn_on
-            target: !input light
-            data:
-              color_temp: '{{ state_attr(''light.bedroom_lights'', ''color_temp'')|int + 20}}'
-              transition: 1
+        sequence: !input button_left_short
 
       - conditions:
           - "{{ command == 'arrow_left_hold' }}"
-        sequence:
-          - repeat:
-              until:
-                - condition: state
-                  entity_id: !input remote
-                  state: arrow_left_release
-                  attribute: action
-              sequence:
-                - service: light.turn_on
-                  data:
-                    color_temp: '{{ state_attr(''light.bedroom_lights'', ''color_temp'')|int + 5}}'
-                  target: !input light
-                - delay:
-                    milliseconds: 100
+        sequence: !input button_left_long
 
       - conditions:
           - "{{ command == 'arrow_right_click' }}"
-        sequence:
-          - service: light.turn_on
-            target: !input light
-            data:
-              color_temp: '{{ state_attr(''light.bedroom_lights'', ''color_temp'')|int - 20}}'
-              transition: 1
+        sequence: !input button_right_short
 
       - conditions:
           - "{{ command == 'arrow_right_hold' }}"
-        sequence:
-          - repeat:
-              until:
-                - condition: state
-                  entity_id: !input remote
-                  state: arrow_left_release
-                  attribute: action
-              sequence:
-                - service: light.turn_on
-                  data:
-                    color_temp: '{{ state_attr(''light.bedroom_lights'', ''color_temp'')|int - 5}}'
-                  target: !input light
-                - delay:
-                    milliseconds: 100
+        sequence: !input button_right_long
