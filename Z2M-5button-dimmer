@@ -14,6 +14,7 @@ blueprint:
 
     This is a fork of starbuck93's blueprint for ZHA found here https://community.home-assistant.io/t/zigbee2mqtt-ikea-five-button-remote/255308
 
+
   domain: automation
   input:
     remote:
@@ -79,7 +80,8 @@ max_exceeded: silent
 variables:
   force_brightness: !input force_brightness
 
-- trigger:
+- alias: 'normal function'
+  trigger:
   - platform: state
     entity_id: !input remote
     attribute: action
@@ -139,7 +141,8 @@ variables:
             - "{{ command == 'arrow_right_hold' }}"
           sequence: !input button_right_long
           
-- trigger:
+- alias: 'brightness down hold'
+  trigger:
   - platform: state
     entity_id: !input remote
     attribute: action
@@ -159,7 +162,8 @@ variables:
               target: !input light
             - delay: '1'    
       
-- trigger:
+- alias: 'brightness up hold'
+  trigger:
   - platform: state
     entity_id: !input remote
     attribute: action
