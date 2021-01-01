@@ -127,7 +127,6 @@ action:
                 - service: light.turn_on
                   data:
                     brightness_step_pct: 10
-                    transition: 1
                   target: !input light
                 - delay:
                     milliseconds: 500
@@ -154,7 +153,6 @@ action:
                 - service: light.turn_on
                   data:
                     brightness_step_pct: -10
-                    transition: 1
                   target: !input light
                 - delay:
                     milliseconds: 500
