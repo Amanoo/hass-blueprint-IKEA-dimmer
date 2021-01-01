@@ -121,7 +121,7 @@ action:
               until:
                 - condition: state
                   entity_id: !input remote
-                  state: brightness_up_release
+                  state: arrow_left_click
                   attribute: action
               sequence:
                 - service: light.turn_on
@@ -147,7 +147,7 @@ action:
               until:
                 - condition: state
                   entity_id: !input remote
-                  state: brightness_down_release
+                  state: arrow_left_click
                   attribute: action
               sequence:
                 - service: light.turn_on
