@@ -114,8 +114,11 @@ action:
               brightness_step_pct: 10
               transition: 1
 
-      - conditions:
-          - "{{ command == 'brightness_up_hold' }}"
+      - trigger:
+          platform: state
+          entity_id: !input remote
+          attribute: action
+          state: brightness_up_hold
         sequence:
           - repeat:
               until:
@@ -139,8 +142,11 @@ action:
               brightness_step_pct: -10
               transition: 1
 
-      - conditions:
-          - "{{ command == 'brightness_down_hold' }}"
+      - trigger:
+          platform: state
+          entity_id: !input remote
+          attribute: action
+          state: brightness_down_hold
         sequence:
           - repeat:
               until:
