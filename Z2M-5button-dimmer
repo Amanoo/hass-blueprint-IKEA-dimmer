@@ -118,6 +118,10 @@ action:
           - "{{ command == 'brightness_up_hold' }}"
         sequence:
           - repeat:
+              until:
+                - condition: state
+                  entity_id: !input remote
+                  state: arrow_left_click
               sequence:
                 - service: light.turn_on
                   data:
@@ -125,11 +129,6 @@ action:
                   target: !input light
                 - delay:
                     milliseconds: 1000
-              until:
-                - condition: state
-                  entity_id: !input remote
-                  state: arrow_left_click
-                  attribute: action
 
       - conditions:
           - "{{ command == 'brightness_down_click' }}"
@@ -144,6 +143,10 @@ action:
           - "{{ command == 'brightness_down_hold' }}"
         sequence:
           - repeat:
+              until:
+                - condition: state
+                  entity_id: !input remote
+                  state: arrow_left_click
               sequence:
                 - service: light.turn_on
                   data:
@@ -151,11 +154,6 @@ action:
                   target: !input light
                 - delay:
                     milliseconds: 1000
-              until:
-                - condition: state
-                  entity_id: !input remote
-                  state: arrow_left_click
-                  attribute: action
 
       - conditions:
           - "{{ command == 'arrow_left_click' }}"
