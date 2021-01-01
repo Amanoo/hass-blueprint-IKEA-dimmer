@@ -102,10 +102,10 @@ action:
               sequence:
                 - service: light.turn_on
                   data:
-                    brightness_step_pct: 1
+                    brightness_step_pct: 5
                   target: !input light
                 - delay:
-                    milliseconds: 50
+                    milliseconds: 100
 
       - conditions:
           - "{{ command == 'brightness_down_click' }}"
@@ -128,11 +128,10 @@ action:
               sequence:
                 - service: light.turn_on
                   data:
-                    brightness_step_pct: -1
-                    transition: 1
+                    brightness_step_pct: -5
                   target: !input light
                 - delay:
-                    milliseconds: 50
+                    milliseconds: 100
 
       - conditions:
           - "{{ command == 'arrow_left_click' }}"
@@ -155,10 +154,10 @@ action:
               sequence:
                 - service: light.turn_on
                   data:
-                    color_temp: '{{ state_attr(''light.bedroom_lights'', ''color_temp'')|int + 1}}'
+                    color_temp: '{{ state_attr(''light.bedroom_lights'', ''color_temp'')|int + 5}}'
                   target: !input light
                 - delay:
-                    milliseconds: 50
+                    milliseconds: 100
 
       - conditions:
           - "{{ command == 'arrow_right_click' }}"
@@ -181,7 +180,7 @@ action:
               sequence:
                 - service: light.turn_on
                   data:
-                    color_temp: '{{ state_attr(''light.bedroom_lights'', ''color_temp'')|int - 1}}'
+                    color_temp: '{{ state_attr(''light.bedroom_lights'', ''color_temp'')|int - 5}}'
                   target: !input light
                 - delay:
-                    milliseconds: 50
+                    milliseconds: 100
