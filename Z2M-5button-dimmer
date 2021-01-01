@@ -1,5 +1,5 @@
 blueprint:
-  name: Z2M - IKEA five button remote for lights with smooth dimming and colour temperature
+  name: Z2M - IKEA five button remote for lights
   description: |
     Control lights with an IKEA five button remote (the round ones).
 
@@ -79,100 +79,102 @@ max_exceeded: silent
 variables:
   force_brightness: !input force_brightness
 
-trigger:
+- trigger:
   - platform: state
     entity_id: !input remote
     attribute: action
 
-action:
-  - variables:
-      command: "{{ trigger.to_state.state }}"
-  - choose:
-      - conditions:
-          - "{{ command == 'toggle' }}"
-        sequence:
-          - choose:
-              - conditions: "{{ force_brightness }}"
-                sequence:
-                  - service: light.toggle
-                    target: !input light
-                    data:
-                      transition: 1
-                      brightness_pct: !input brightness
-            default:
-              - service: light.toggle
-                target: !input light
-                data:
-                  transition: 1
-
-      - conditions:
-          - "{{ command == 'brightness_up_click' }}"
-        sequence:
-          - service: light.turn_on
-            target: !input light
-            data:
-              brightness_step_pct: 10
-              transition: 1
-
-      - trigger:
-          platform: state
-          entity_id: !input remote
-          attribute: action
-          state: brightness_up_hold
-        sequence:
-          - repeat:
-              until:
-                - condition: state
-                  entity_id: !input remote
-                  state: arrow_left_click
-              sequence:
-                - service: light.turn_on
-                  data:
-                    brightness_step_pct: 10
+  action:
+    - variables:
+        command: "{{ trigger.to_state.state }}"
+    - choose:
+        - conditions:
+            - "{{ command == 'toggle' }}"
+          sequence:
+            - choose:
+                - conditions: "{{ force_brightness }}"
+                  sequence:
+                    - service: light.toggle
+                      target: !input light
+                      data:
+                        transition: 1
+                        brightness_pct: !input brightness
+              default:
+                - service: light.toggle
                   target: !input light
-                - delay:
-                    milliseconds: 1000
-
-      - conditions:
-          - "{{ command == 'brightness_down_click' }}"
-        sequence:
-          - service: light.turn_on
-            target: !input light
-            data:
-              brightness_step_pct: -10
-              transition: 1
-
-      - trigger:
-          platform: state
-          entity_id: !input remote
-          attribute: action
-          state: brightness_down_hold
-        sequence:
-          - repeat:
-              until:
-                - condition: state
-                  entity_id: !input remote
-                  state: arrow_left_click
-              sequence:
-                - service: light.turn_on
                   data:
-                    brightness_step_pct: -10
-                  target: !input light
-                - delay:
-                    milliseconds: 1000
+                    transition: 1
 
-      - conditions:
-          - "{{ command == 'arrow_left_click' }}"
-        sequence: !input button_left_short
+        - conditions:
+            - "{{ command == 'brightness_up_click' }}"
+          sequence:
+            - service: light.turn_on
+              target: !input light
+              data:
+                brightness_step_pct: 10
+                transition: 1
 
-      - conditions:
-          - "{{ command == 'arrow_left_hold' }}"
-        sequence: !input button_left_long
+        - conditions:
+            - "{{ command == 'brightness_down_click' }}"
+          sequence:
+            - service: light.turn_on
+              target: !input light
+              data:
+                brightness_step_pct: -10
+                transition: 1
 
-      - conditions:
-          - "{{ command == 'arrow_right_click' }}"
-        sequence: !input button_right_short
+        - conditions:
+            - "{{ command == 'arrow_left_click' }}"
+          sequence: !input button_left_short
 
-      - conditions:
-          - "{{ command == 'arrow_right_hold' }}"
-        sequence: !input button_right_long
+        - conditions:
+            - "{{ command == 'arrow_left_hold' }}"
+          sequence: !input button_left_long
+
+        - conditions:
+            - "{{ command == 'arrow_right_click' }}"
+          sequence: !input button_right_short
+
+        - conditions:
+            - "{{ command == 'arrow_right_hold' }}"
+          sequence: !input button_right_long
+          
+- trigger:
+  - platform: state
+    entity_id: !input remote
+    attribute: action
+    to: brightness_down_hold
+  action:
+    - repeat:
+        until:
+          - condition: state
+            entity_id: !input remote
+            state: brightness_down_release
+            attribute: action
+          sequence:
+            - service: light.turn_on
+              data:
+                brightness_step_pct: -10
+                transition: 1
+              target: !input light
+            - delay: '1'    
+      
+- trigger:
+  - platform: state
+    entity_id: !input remote
+    attribute: action
+    to: brightness_up_hold
+  action:
+    - repeat:
+        until:
+          - condition: state
+            entity_id: !input remote
+            state: brightness_up_release
+            attribute: action
+          sequence:
+            - service: light.turn_on
+              data:
+                brightness_step_pct: 10
+                transition: 1
+              target: !input light
+            - delay: '1'
