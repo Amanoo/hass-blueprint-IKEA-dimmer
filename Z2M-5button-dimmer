@@ -129,7 +129,7 @@ action:
                     brightness_step_pct: 1
                   target: !input light
                 - delay:
-                    milliseconds: 50
+                    milliseconds: 100
 
       - conditions:
           - "{{ command == 'brightness_down_click' }}"
@@ -155,7 +155,7 @@ action:
                     brightness_step: -1
                   target: !input light
                 - delay:
-                    milliseconds: 50
+                    milliseconds: 100
 
       - conditions:
           - "{{ command == 'arrow_left_click' }}"
