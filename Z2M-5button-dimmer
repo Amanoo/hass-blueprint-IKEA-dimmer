@@ -12,7 +12,7 @@ blueprint:
     The "left" and "right" buttons can be assigned to a short and long button
     press action. This allows you to assign, e.g., a scene or anything else.
 
-    This is a fork of @Frenck's blueprint for ZHA found here https://community.home-assistant.io/t/zha-ikea-five-button-remote-for-lights/253804
+    This is a fork of @starbuck93's blueprint found here https://community.home-assistant.io/t/zigbee2mqtt-ikea-five-button-remote/255308
 
   domain: automation
   input:
@@ -126,10 +126,10 @@ action:
               sequence:
                 - service: light.turn_on
                   data:
-                    brightness_step_pct: 5
+                    brightness_step_pct: 10
+                    transition: 1
                   target: !input light
-                - delay:
-                    milliseconds: 100
+                - delay: '1'
 
       - conditions:
           - "{{ command == 'brightness_down_click' }}"
@@ -152,10 +152,10 @@ action:
               sequence:
                 - service: light.turn_on
                   data:
-                    brightness_step_pct: -5
+                    brightness_step_pct: -10
+                    transition: 1
                   target: !input light
-                - delay:
-                    milliseconds: 100
+                - delay: '1'
 
       - conditions:
           - "{{ command == 'arrow_left_click' }}"
