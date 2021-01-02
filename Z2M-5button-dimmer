@@ -126,10 +126,10 @@ action:
               sequence:
                 - service: light.turn_on
                   data:
-                    brightness_step_pct: 10
-                    transition: 1
+                    brightness_step_pct: 1
                   target: !input light
-                - delay: '1'
+                - delay:
+                    milliseconds: 20
 
       - conditions:
           - "{{ command == 'brightness_down_click' }}"
@@ -152,10 +152,10 @@ action:
               sequence:
                 - service: light.turn_on
                   data:
-                    brightness_step_pct: -10
-                    transition: 1
+                    brightness_step: -1
                   target: !input light
-                - delay: '1'
+                - delay:
+                    milliseconds: 20
 
       - conditions:
           - "{{ command == 'arrow_left_click' }}"
