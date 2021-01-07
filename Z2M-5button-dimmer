@@ -159,16 +159,52 @@ action:
 
       - conditions:
           - "{{ command == 'arrow_left_click' }}"
-        sequence: !input button_left_short
+        sequence:
+          - service: light.turn_on
+            target: !input light
+            data:
+              color_temp: '{{ state_attr(''light.bedroom_lights'', ''color_temp'')|int - 15}}'
+              transition: 1
 
       - conditions:
           - "{{ command == 'arrow_left_hold' }}"
-        sequence: !input button_left_long
+        sequence:
+          - repeat:
+              until:
+                - condition: state
+                  entity_id: !input remote
+                  state: brightness_down_release
+                  attribute: action
+              sequence:
+                - service: light.turn_on
+                  data:
+                    color_temp: '{{ state_attr(''light.bedroom_lights'', ''color_temp'')|int - 1}}'
+                  target: !input light
+                - delay:
+                    milliseconds: 100
 
       - conditions:
           - "{{ command == 'arrow_right_click' }}"
-        sequence: !input button_right_short
+        sequence:
+          - service: light.turn_on
+            target: !input light
+            data:
+              color_temp: '{{ state_attr(''light.bedroom_lights'', ''color_temp'')|int + 15}}'
+              transition: 1
 
       - conditions:
           - "{{ command == 'arrow_right_hold' }}"
-        sequence: !input button_right_long
+        sequence:
+          - repeat:
+              until:
+                - condition: state
+                  entity_id: !input remote
+                  state: brightness_down_release
+                  attribute: action
+              sequence:
+                - service: light.turn_on
+                  data:
+                    color_temp: '{{ state_attr(''light.bedroom_lights'', ''color_temp'')|int + 1}}'
+                  target: !input light
+                - delay:
+                    milliseconds: 100
